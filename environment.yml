@@ -1,0 +1,10 @@
+name: digi-inno-road-prod
+channels:
+  - defaults
+dependencies:
+  - jupyter=1.1.1
+  - numpy=2.3.3
+  - openpyxl=3.1.5
+  - pandas=2.3.3
+  - pip=25.2
+  - python=3.13.7
