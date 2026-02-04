@@ -1,0 +1,19 @@
+[project]
+name = "innoprod"
+version = "0.0.1"
+authors = [
+  { name="Robert Clegg", email="roughhawkbit@gmail.com" },
+]
+description = "Package supporting analysis of data around Innovation, Productivity, and Growth in manufacturing SMEs"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/roughhawkbit/digi-inno-road-prod"
+Issues = "https://github.com/roughhawkbit/digi-inno-road-prod/issues"
