@@ -9,6 +9,8 @@ Follow the instructions [here](https://www.merge.dev/blog/get-folders-google-dri
 * When downloading the JSON file with credentials, rename that file `credentials.json` and store it in the `secrets` subdirectory. All `.json` files in that subdirectory are ignored by git and so will not be pushed to GitHub.
 
 
+Within **APIs and Services**, click **Enabled APIS and services** on the left, **+ Enable APIs and services** top-centre, and then search for "sheets". Select the **Google Sheets API** box and then click **Enable**.
+
 ## Accessing the Google drive
 When first trying to access the data on Google Drive, a browser window should open requesting that you log in. If using a machine where the primary Google account registered is _not_ your university account, then the browser window that opens will attempt to log you in using the wrong account and this will not be permitted.
 
@@ -19,3 +21,11 @@ Please visit this URL to authorise this application: https://accounts.google.com
 Copy this URL to a browser window where you _are_ logged in using your university Google account and the correct Google account should be choosable.
 
 TODO: replace this workaround with a better solution.
+
+
+Within the Google Cloud Console, enable the Google Sheets API:
+https://console.cloud.google.com/apis/library/sheets.googleapis.com?project=dir-productivity
+
+## Reading in a sheet
+
+

@@ -1,5 +1,6 @@
 # Code adapted from https://www.merge.dev/blog/get-folders-google-drive-api
 
+import json
 import os.path
 
 from google.auth.transport.requests import Request
@@ -8,7 +9,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-SCOPES = ["https://www.googleapis.com/auth/drive.metadata.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 SECRETS_DIR = "./secrets/"
 TOKEN_PATH = SECRETS_DIR + "token.json"
 CREDENTIALS_PATH = SECRETS_DIR + "credentials.json"
@@ -68,6 +69,26 @@ def getFiles(mimeType: str):
   
   return outputs
 
+def readSpreadsheet(sheet_id: str, range: str):
+  try:
+    service = build("sheets", "v4", credentials=getCredentials())
+    sheet = service.spreadsheets()
+    result = (
+        sheet.values()
+        .get(spreadsheetId=sheet_id, range=range)
+        .execute()
+    )
+    values = result.get("values", [])
+    return values
+  except HttpError as err:
+    print(err)
+  return None
+
+
 if __name__ == "__main__":
-  print("Folders:\n" + "\n".join(getFiles("application/vnd.google-apps.folder")))
-  print("Spreadsheets:\n" + "\n".join(getFiles("application/vnd.google-apps.spreadsheet")))
+  # print("Folders:\n" + "\n".join(getFiles("application/vnd.google-apps.folder")))
+  # print("Spreadsheets:\n" + "\n".join(getFiles("application/vnd.google-apps.spreadsheet")))
+  with open('./secrets/sheet.json', 'r') as f:
+    sheet_metadata = json.load(f)
+  for name, range in sheet_metadata['ranges'].items():
+    print(readSpreadsheet(sheet_metadata['sheet_id'], range))
