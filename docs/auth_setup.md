@@ -1,6 +1,6 @@
 # Authentication Setup
 
-This package uses the `python-o365` package to connect to SharePoint, where the input data is stored and results will be written out to. Data should only ever be written to storage on machines that belong to the University.
+This package uses the various google packages to connect to Google Drive, where the input data is stored and results will be written out to. Data should only ever be written to storage on machines that belong to the University.
 
 ## Google Drive setup
 
