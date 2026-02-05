@@ -9,33 +9,34 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
-SECRETS_DIR = "./secrets/"
-TOKEN_PATH = SECRETS_DIR + "token.json"
-CREDENTIALS_PATH = SECRETS_DIR + "credentials.json"
+from .path_tools import secrets_path
 
-def getCredentials():
+SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
+
+def get_credentials():
   creds = None
+  token_path = os.path.abspath(os.path.join(secrets_path(), "token.json"))
+  creds_path = os.path.abspath(os.path.join(secrets_path(), "credentials.json")) 
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
   # time.
-  if os.path.exists(TOKEN_PATH):
-    creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
+  if os.path.exists(token_path):
+    creds = Credentials.from_authorized_user_file(token_path, SCOPES)
   # If there are no (valid) credentials available, let the user log in.
   if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
       creds.refresh(Request())
     else:
       flow = InstalledAppFlow.from_client_secrets_file(
-          CREDENTIALS_PATH, SCOPES
+          creds_path, SCOPES
       )
       creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
-    with open(TOKEN_PATH, "w") as token:
+    with open(token_path, "w") as token:
       token.write(creds.to_json())
   return creds
 
-def getFiles(mimeType: str):
+def get_files(mimeType: str):
   """
   Returns a list of all file names of the given MIME type.
   
@@ -45,7 +46,7 @@ def getFiles(mimeType: str):
   outputs = []
 
   try:
-    service = build("drive", "v3", credentials=getCredentials())
+    service = build("drive", "v3", credentials=get_credentials())
     page_token = None
 
     while True:
@@ -69,9 +70,9 @@ def getFiles(mimeType: str):
   
   return outputs
 
-def readSpreadsheet(sheet_id: str, range: str):
+def read_spreadsheet(sheet_id: str, range: str):
   try:
-    service = build("sheets", "v4", credentials=getCredentials())
+    service = build("sheets", "v4", credentials=get_credentials())
     sheet = service.spreadsheets()
     result = (
         sheet.values()
@@ -91,4 +92,4 @@ if __name__ == "__main__":
   with open('./secrets/sheet.json', 'r') as f:
     sheet_metadata = json.load(f)
   for name, range in sheet_metadata['ranges'].items():
-    print(readSpreadsheet(sheet_metadata['sheet_id'], range))
+    print(read_spreadsheet(sheet_metadata['sheet_id'], range))
