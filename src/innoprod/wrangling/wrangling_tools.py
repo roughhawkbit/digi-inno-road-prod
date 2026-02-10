@@ -1,0 +1,33 @@
+import pandas as pd
+
+def replace_values(df, colname, old_value, new_value):
+    mask = df[colname] == old_value
+    df.loc[mask, colname] = new_value
+    return df
+
+def characterise_df_columnwise(df):
+    characterisation = []
+    for col in df.columns:
+        # Values cannot be both '' and NaN, so this mask is True only when both are false
+        mask = (df[col] == '') == (df[col].isna())
+        u = df[mask][col].unique().size
+        c = sum(mask)
+        N = df[col].size
+        var_char = {
+            'Name': col,
+            # 'Type': 
+            'Uniqueness (n)': u,
+            'Uniqueness (%)': u / N,
+            'Completeness (n)': c,
+            'Completeness (%)': c / N
+        }
+        characterisation.append(var_char)
+    characterisation = pd.DataFrame(characterisation, columns=['Name', 'Uniqueness', 'Completeness'])
+    return characterisation
+
+
+def is_in_date_format(series: pd.Series):
+    if not pd.api.types.is_string_dtype(series):
+        return False
+    
+    
