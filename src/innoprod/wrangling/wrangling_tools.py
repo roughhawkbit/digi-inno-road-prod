@@ -30,7 +30,7 @@ def is_in_date_format(series: pd.Series):
         return False
 
 def is_non_empty(series: pd.Series):
-    # Values cannot be both '' and NaN, so this mask is True only when both are false
+    # TODO consider switching isna() for notna()
     empty_strs = (series == '').fillna(False)
     nan_strs = (series == 'nan').fillna(False)
     return (empty_strs != nan_strs) == (series.isna())
