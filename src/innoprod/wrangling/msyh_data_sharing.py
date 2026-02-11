@@ -30,7 +30,7 @@ def wrangle_roadmaps(roadmaps_df):
         roadmaps_df[col] = roadmaps_df[col].str.replace(pat={'£':'', ',':''})
         roadmaps_df = replace_values(roadmaps_df, col, '-', None)
         roadmaps_df = replace_values(roadmaps_df, col, '', None)
-        roadmaps_df['Turnover'] = pd.to_numeric(roadmaps_df['Turnover'])
+        roadmaps_df[col] = pd.to_numeric(roadmaps_df[col])
 
     # Date values
     date_cols = [
@@ -60,6 +60,54 @@ def wrangle_roadmaps(roadmaps_df):
     ]
 
     return roadmaps_df
+
+
+def wrangle_grants(grants_df):
+     # Integer values
+    int_cols = [
+        'Project Number'
+    ]
+    for col in int_cols:
+        grants_df = replace_values(grants_df, col, '', None)
+        grants_df[col] = grants_df[col].astype("Int64")
+
+    # Monetary values
+    monetary_cols = [
+        'Anticipated Total Cost',
+        'Grant Value for this Application',
+        'Approved Total Project Cost',
+        'Grant Amount Offered',
+        'Actual Project Spend',
+        'Actual amount claimed',
+        'Claimed Variance to Offer'
+    ]
+    for col in monetary_cols:
+        grants_df[col] = grants_df[col].str.replace(pat={'£':'', ',':''})
+        grants_df = replace_values(grants_df, col, '-', None)
+        grants_df = replace_values(grants_df, col, '', None)
+        grants_df[col] = pd.to_numeric(grants_df[col])
+
+    # Date values
+    date_cols = [
+        'Application Date',
+        'Date Grant Offered',
+        'Grant Expiry Date',
+        'Date Claimed',
+        'Date Offer Withdrawn',
+        'Client invoice date',
+        'Date Grant Paid'
+    ]
+    for col in date_cols:
+        grants_df[col] = pd.to_datetime(grants_df[col], format="%m/%d/%Y")
+
+    # Categorical values
+    categorical_cols = [
+        'GAF Type Intensity',
+        'Application Status',
+        'Claim Status'
+    ]
+
+    return grants_df
 
 
 from ..sheet_tools import get_sheet_dfs
