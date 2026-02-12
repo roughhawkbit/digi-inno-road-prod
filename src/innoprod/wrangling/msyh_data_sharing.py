@@ -3,6 +3,18 @@ import pandas as pd
 from .wrangling_tools import replace_values
 
 def wrangle_roadmaps(roadmaps_df):
+    # Convert Likert scales to integers
+    likert_cols = [
+        'How did you find the process of accessing the programme?',
+        'How valuable did you find the involvement of your contact within the programme during the course of the support?',
+        'How valuable did you find the GROWTHmapper and its report in identifying the key areas of supporting your business?',
+        'How valuable did you find the support you received from the Expert Coach during the course of the programme?',
+        'To what extent were you satisfied with the Programme overall?',
+    ]
+    for col in likert_cols:
+        mask = roadmaps_df[col].notna()
+        roadmaps_df.loc[mask, col] = roadmaps_df[mask][col].str[0]
+
     # Integer values
     int_cols = [
         'Number of GAFs', 
@@ -14,7 +26,7 @@ def wrangle_roadmaps(roadmaps_df):
         'Employee Increase (FTE calc)',
         'Employees at Project Completion (FTE)'
     ]
-    for col in int_cols:
+    for col in int_cols + likert_cols:
         roadmaps_df = replace_values(roadmaps_df, col, '', None)
         roadmaps_df[col] = roadmaps_df[col].astype("Int64")
 
@@ -44,20 +56,31 @@ def wrangle_roadmaps(roadmaps_df):
     for col in date_cols:
         roadmaps_df[col] = pd.to_datetime(roadmaps_df[col], format="%m/%d/%Y")
     
-    # Boolean values (with missing)
+    # Boolean values (nullable)
     bool_cols = [
         'Do you have a Digital Champion in place?',
         'Has resource consumption (electricity, gas, waste, and water) or Greenhouse Gas emissions reduced since you started working with the Programme?'
     ]
-
+    for col in bool_cols:
+        roadmaps_df[col] = roadmaps_df[col].map({'Yes': True, 'No': False})
 
     # Categorical values
-    categorical_cols = [
-        'Referral Source',
-        'LEP',
-        'Local Authority',
-        '.... MANY MORE'
-    ]
+    categorical_cols = {
+        'Referral Source': None,
+        'LEP': None,
+        'Local Authority': None,
+        'Org Size by Number of FTE (calc)': ['Micro - 1-9', 'Small - 10-49', 'Medium - 50-249'],
+        'Main historical barrier': None,
+        'Application area of technology in the Action Plan': None,
+        'Sub-application area of technology in the Action Plan': None,
+        'Anticipated Made Smarter Support Package(s) to be accessed': None, # TODO handle as a list of categoricals?
+        # 'Other business support referrals', TODO values would need some cleaming up first
+        'Would you recommend the Programme to others?': ['No', 'Maybe', 'Yes']
+    }
+    for col, ordering in categorical_cols.items():
+        roadmaps_df[col] = roadmaps_df[col].astype("category")
+        if ordering is not None:
+            roadmaps_df[col] = roadmaps_df[col].cat.set_categories(ordering, ordered=True)
 
     return roadmaps_df
 
@@ -106,6 +129,8 @@ def wrangle_grants(grants_df):
         'Application Status',
         'Claim Status'
     ]
+    for col in categorical_cols:
+        grants_df[col] = grants_df[col].astype("category")
 
     return grants_df
 
