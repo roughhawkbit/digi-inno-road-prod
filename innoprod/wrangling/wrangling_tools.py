@@ -24,11 +24,6 @@ def characterise_df_columnwise(df):
     characterisation = pd.DataFrame(characterisation, columns=['Name', 'Uniqueness', 'Completeness'])
     return characterisation
 
-
-def is_in_date_format(series: pd.Series):
-    if not pd.api.types.is_string_dtype(series):
-        return False
-
 def is_non_empty(series: pd.Series):
     # TODO consider switching isna() for notna()
     empty_strs = (series == '').fillna(False)
