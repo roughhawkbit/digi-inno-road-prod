@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .wrangling_tools import replace_values
+from .wrangling_tools import replace_values, remove_newlines_from_str_series
 
 def wrangle_roadmaps(roadmaps_df):
     # Convert Likert scales to integers
@@ -81,6 +81,24 @@ def wrangle_roadmaps(roadmaps_df):
         roadmaps_df[col] = roadmaps_df[col].astype("category")
         if ordering is not None:
             roadmaps_df[col] = roadmaps_df[col].cat.set_categories(ordering, ordered=True)
+
+    # Text columns
+    text_cols = [
+        'Summary review of Edge Digital diagnostic report & current state and key improvement areas',
+        'What are the internal barriers to growth? How do you intend to finance future growth? Are there sufficient leadership and management skills in the business to achieve your growth? What opportunities do you have to expand into new markets?',
+        'Level of current Strategic Digital Skills/knowledge in the business',
+        'Level of current Technical Digital Skills/knowledge in the business',
+        'Whether the business is already investing/adopting/utilising Industry 4.0 Technologies, with examples',
+        'Summary of the identified problems, including Gap Analysis',
+        'Key potential industry 4.0 solutions to address the identified problems/gaps',
+        'Recommended Action Plan to utilise Industry 4.0 Technology',
+        'Overview of qualitative benefits of recommended Action Plan (positive/negative)',
+        'Skills and other requirements that will be needed to successfully implement the recommended Action Plan',
+        'What has been your overall opinion of the support you have received in this programme? (Add comments)',
+        
+    ]
+    for col in text_cols:
+        roadmaps_df[col] = remove_newlines_from_str_series(roadmaps_df[col])
 
     return roadmaps_df
 

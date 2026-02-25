@@ -30,6 +30,9 @@ def is_non_empty(series: pd.Series):
     nan_strs = (series == 'nan').fillna(False)
     return (empty_strs != nan_strs) == (series.isna())
 
+def remove_newlines_from_str_series(series: pd.Series.str):
+    return series.replace('\n', '', regex=True)
+
 if __name__ == '__main__':
     series = pd.Series(['a', 'b', '', 'd', 'nan'])
     print(is_non_empty(series))

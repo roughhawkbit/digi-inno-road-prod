@@ -13,8 +13,15 @@ class TestPathTools(unittest.TestCase):
         except AssertionError as e:
             raise self.failureException(msg) from e
 
+    def assertSeriesEqual(self, a, b, msg):
+        try:
+            pd_testing.assert_series_equal(a, b)
+        except AssertionError as e:
+            raise self.failureException(msg) from e
+
     def setUp(self):
         self.addTypeEqualityFunc(pd.DataFrame, self.assertDataframeEqual)
+        self.addTypeEqualityFunc(pd.Series, self.assertSeriesEqual)
     
     def test_replace_values(self):
         df = pd.DataFrame({'col1': ['a', 'b', 'c', 'd'], 'col2': [1, 2, 3, 4]})
@@ -26,4 +33,9 @@ class TestPathTools(unittest.TestCase):
         ser = pd.Series(['text', '', 'more text', 'nan', 'even more text', None])
         mask = wrangling_tools.is_non_empty(ser)
         self.assertEqual(mask.tolist(), [True, False, True, False, True, False])
-        
+
+    def test_remove_newlines_from_str_series(self):
+        ser = pd.Series(['text', 'more\n text', None, 'even\n\n more\k text\n', ''])
+        expected = pd.Series(['text', 'more text', None, 'even more\k text', ''])
+        result = wrangling_tools.remove_newlines_from_str_series(ser)
+        self.assertEqual(result, expected)
