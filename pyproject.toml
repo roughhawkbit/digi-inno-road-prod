@@ -17,3 +17,6 @@ license-files = ["LICENSE"]
 [project.urls]
 Homepage = "https://github.com/roughhawkbit/digi-inno-road-prod"
 Issues = "https://github.com/roughhawkbit/digi-inno-road-prod/issues"
+
+[tool.setuptools]
+py-modules = ["innoprod"]
