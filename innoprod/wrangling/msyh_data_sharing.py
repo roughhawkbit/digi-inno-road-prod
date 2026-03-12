@@ -95,7 +95,6 @@ def wrangle_roadmaps(roadmaps_df):
         'Overview of qualitative benefits of recommended Action Plan (positive/negative)',
         'Skills and other requirements that will be needed to successfully implement the recommended Action Plan',
         'What has been your overall opinion of the support you have received in this programme? (Add comments)',
-        
     ]
     for col in text_cols:
         roadmaps_df[col] = remove_newlines_from_str_series(roadmaps_df[col])
