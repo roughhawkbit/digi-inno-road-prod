@@ -1,28 +1,10 @@
-import unittest
-
 import pandas as pd
-import pandas.testing as pd_testing
 
 from innoprod.wrangling import wrangling_tools
+from tests.pdtestcase import PdTestCase
 
-class TestPathTools(unittest.TestCase):
+class TestPathTools(PdTestCase):
 
-    def assertDataframeEqual(self, a, b, msg):
-        try:
-            pd_testing.assert_frame_equal(a, b)
-        except AssertionError as e:
-            raise self.failureException(msg) from e
-
-    def assertSeriesEqual(self, a, b, msg):
-        try:
-            pd_testing.assert_series_equal(a, b)
-        except AssertionError as e:
-            raise self.failureException(msg) from e
-
-    def setUp(self):
-        self.addTypeEqualityFunc(pd.DataFrame, self.assertDataframeEqual)
-        self.addTypeEqualityFunc(pd.Series, self.assertSeriesEqual)
-    
     def test_replace_values(self):
         df = pd.DataFrame({'col1': ['a', 'b', 'c', 'd'], 'col2': [1, 2, 3, 4]})
         df = wrangling_tools.replace_values(df, 'col1', 'b', 'x')
