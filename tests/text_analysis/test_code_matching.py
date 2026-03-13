@@ -3,6 +3,7 @@ from parameterized import parameterized
 
 from innoprod.text_analysis import code_matching
 from innoprod.text_analysis.matching_status import MatchingStatus
+
 from tests.pdtestcase import PdTestCase
 
 class TestCodeMatching(PdTestCase):
