@@ -64,3 +64,16 @@ class TestCodeMatching(PdTestCase):
             code_name: expected_matches
         })
         self.assertEqual(updated_recurring_sentences_df, expected)
+
+    @parameterized.expand([
+            ['test', 'this is a test', True],
+            ['test', 'different text', False],
+            ['test .* qualifier', 'regex test with important qualifier', True],
+            ['test .* [^not|without|except] qualifier', 'regex test without important qualifier', False],
+    ])
+    def test_matches_code_pattern(self, pattern, sentence, expected):
+        # Act
+        result = code_matching.is_pattern_in_sentence(pattern, sentence)
+        
+        # Assert
+        self.assertEqual(result, expected)

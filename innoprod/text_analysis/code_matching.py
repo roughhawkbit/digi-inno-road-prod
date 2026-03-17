@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 from innoprod.text_analysis import matching_status
 
@@ -35,3 +36,8 @@ def modify_code(code_name, code_patterns, codes_df, recurring_sentences_df):
 
     return codes_df, recurring_sentences_df
 
+
+def is_pattern_in_sentence(pattern, sentence):
+    m = re.search(pattern, sentence)
+    return m is not None
+    
