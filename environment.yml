@@ -19,3 +19,4 @@ dependencies:
  - requests=2.32.4
  - scikit-learn=1.8.0
  - statsmodels=0.14.6
+ - transformers=4.57.1
