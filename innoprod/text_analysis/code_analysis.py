@@ -1,5 +1,20 @@
-from ipywidgets import widgets, Layout, HBox, HTML
+from ipywidgets import HTML
 import re
+
+HTML_TOOLTIP_PREAMBLE = r"<style>.tooltip {position:relative;display:inline-block;cursor:pointer;} .tooltiptext{visibility:hidden;width: 130px;background-color:black;color:#fff;text-align:center;border-radius:6px;padding:5px 0;position:absolute;z-index:1;} .tooltip:hover .tooltiptext{visibility:visible;}</style>"
+
+def decorate_matches(highlighted_sentence, pattern, title, highlight_color):
+    # TODO include keyword title as a hover tooltip
+    matches = re.findall(pattern, highlighted_sentence, flags=re.IGNORECASE)
+    for match in matches:
+        highlighted_sentence = re.sub(
+            re.escape(match), 
+            f'<span class="tooltip"; style="background-color: {highlight_color};">{match}<span class="tooltiptext">{title}</span></span>', 
+            highlighted_sentence,
+            flags=re.IGNORECASE
+        )
+    return highlighted_sentence
+
 
 class CodeAnalysis:
     def __init__(self, recurring_sentences_df):
@@ -22,7 +37,7 @@ class CodeAnalysis:
             print(sentence)
 
     def display_sentence_with_highlights(self, sentence):
-        highlighted_sentence = sentence + ''
+        highlighted_sentence = HTML_TOOLTIP_PREAMBLE + sentence
         for keyword_pattern, keyword_title in self.keywords.items():
             for quantifier_pattern, quantifier_title in self.quantifiers.items():
                 pattern = quantifier_pattern.replace('KEYWORD', keyword_pattern)
@@ -40,14 +55,3 @@ class CodeAnalysis:
         self.quantifiers[quantifier_pattern] = quantifier_title
 
 
-def decorate_matches(highlighted_sentence, pattern, title, highlight_color):
-    # TODO include keyword title as a hover tooltip
-    matches = re.findall(pattern, highlighted_sentence, flags=re.IGNORECASE)
-    for match in matches:
-        highlighted_sentence = re.sub(
-            re.escape(match), 
-            f'<span style="background-color: {highlight_color};">{match}</span>', 
-            highlighted_sentence,
-            flags=re.IGNORECASE
-        )
-    return highlighted_sentence
