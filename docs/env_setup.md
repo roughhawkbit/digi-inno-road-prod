@@ -13,7 +13,7 @@ If it's your first time using this repository, run `conda env create -f environm
 Whenever starting a session running the code, use `conda activate innoprod` first.
 
 ### Resolving Pylance errors
-If using Visual Studio Code (VSC) as your Integrated Development Environment (IDE), you may notice yellow zigzagged lines under Python import statements. Hovering over the lines will display an error message that the import could not be resolved (Pylance). In the bottom-right of your window, there should be a button saying something like "3.13.5 (base)". Click on this and a selection box should open at the top of the window. Choose the option similar to "Python 3... (innoprod)" and the warnings shoudl disappear.
+If using Visual Studio Code (VSC) as your Integrated Development Environment (IDE), you may notice yellow zigzagged lines under Python import statements. Hovering over the lines will display an error message that the import could not be resolved (Pylance). In the bottom-right of your window, there should be a button saying something like "3.13.5 (base)". Click on this and a selection box should open at the top of the window. Choose the option similar to "Python 3... (innoprod)" and the warnings should disappear.
 
 ## PyTorch
 Using PyTorch on many systems may require installation of the Cuda Toolkit.
@@ -31,6 +31,10 @@ C++ build tools and Rust are also required: https://blogs.windows.com/windowsdev
 
 This needs to be completed before attempting to install pytorch.
 
-At time of writing (25 March 2026), PyTorch failed to install correctly via conda but succeeded via pip.
+At time of writing (25 March 2026), PyTorch failed to install correctly via conda but succeeded via pip:
+
+```
+pip install torch
+```
 
 There was also a conflict between libiomp5md.dll files: manually removing the copy of this file in ~/miniconda3/envs/innoprod/Library/bin resolved the issue.
