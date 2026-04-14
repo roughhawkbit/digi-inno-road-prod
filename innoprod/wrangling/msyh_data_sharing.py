@@ -39,7 +39,7 @@ def wrangle_roadmaps(roadmaps_df):
         'Increased GVA'
     ]
     for col in monetary_cols:
-        roadmaps_df[col] = roadmaps_df[col].str.replace(pat={'£':'', ',':''})
+        roadmaps_df[col] = roadmaps_df[col].str.replace(r'[\£,\,]', '', regex=True)
         roadmaps_df = replace_values(roadmaps_df, col, '-', None)
         roadmaps_df = replace_values(roadmaps_df, col, '', None)
         roadmaps_df[col] = pd.to_numeric(roadmaps_df[col])
@@ -122,7 +122,7 @@ def wrangle_grants(grants_df):
         'Claimed Variance to Offer'
     ]
     for col in monetary_cols:
-        grants_df[col] = grants_df[col].str.replace(pat={'£':'', ',':''})
+        grants_df[col] = grants_df[col].str.replace(r'[\£,\,]', '', regex=True)
         grants_df = replace_values(grants_df, col, '-', None)
         grants_df = replace_values(grants_df, col, '', None)
         grants_df[col] = pd.to_numeric(grants_df[col])
