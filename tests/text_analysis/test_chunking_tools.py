@@ -3,6 +3,7 @@ import unittest
 from parameterized import parameterized
 
 from collections import OrderedDict
+import copy
 
 from innoprod.text_analysis import chunking_tools
 
@@ -27,11 +28,11 @@ third_sentence['Sentence three.'] = 2
 class TestChunkingTools(unittest.TestCase):
 
     @parameterized.expand([
-        [one_sentence, 3, [one_sentence]],
-        [two_sentences, 3, [one_sentence, second_sentence]],
-        [two_sentences, 4, [two_sentences]],
-        [three_sentences, 4, [two_sentences, third_sentence]],
-        [three_sentences, 5, [two_sentences, third_sentence]],
+        [copy.deepcopy(one_sentence), 3, [copy.deepcopy(one_sentence)]],
+        [copy.deepcopy(two_sentences), 3, [copy.deepcopy(one_sentence), copy.deepcopy(second_sentence)]],
+        [copy.deepcopy(two_sentences), 4, [copy.deepcopy(two_sentences)]],
+        [copy.deepcopy(three_sentences), 4, [copy.deepcopy(two_sentences), copy.deepcopy(third_sentence)]],
+        [copy.deepcopy(three_sentences), 5, [copy.deepcopy(two_sentences), copy.deepcopy(third_sentence)]],
     ])
     def test_split_token_dict(self, input_dict, max_len, expected_output):
         # Arrange
