@@ -29,6 +29,7 @@ class TestChunkingTools(unittest.TestCase):
     @parameterized.expand([
         [one_sentence, 3, [one_sentence]],
         [two_sentences, 3, [one_sentence, second_sentence]],
+        [two_sentences, 4, [two_sentences]],
         [three_sentences, 4, [two_sentences, third_sentence]],
         [three_sentences, 5, [two_sentences, third_sentence]],
     ])

@@ -19,8 +19,9 @@ def split_token_dict(token_dict: OrderedDict, max_len: int):
     sentence, token_len = token_dict.popitem(last=False)
     counter += token_len
     new_dict[sentence] = token_len
-  return [new_dict] + split_token_dict(token_dict, max_len)
-  
+  if token_dict:
+    return [new_dict] + split_token_dict(token_dict, max_len)
+  return [new_dict]
 
 def chunk_text_sentencewise(text, max_words):
   sent_tokenizer = PunktSentenceTokenizer()
