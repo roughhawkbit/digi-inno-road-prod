@@ -29,7 +29,9 @@ def chunk_text_sentencewise(text, max_words):
   sentence_tokens = sent_tokenizer.tokenize(text)
   od = OrderedDict()
   for sentence in sentence_tokens:
-    od[sentence] = len(word_tokenizer.tokenize(sentence))
+    n_words = len(word_tokenizer.tokenize(sentence))
+    if n_words > 0:
+      od[sentence] = n_words
   new_dicts = split_token_dict(od, max_words)
   return [" ".join(list(d.keys())) for d in new_dicts]
 
