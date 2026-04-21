@@ -4,8 +4,12 @@ from nltk.tokenize import PunktSentenceTokenizer, RegexpTokenizer
 
 
 def split_token_dict(token_dict: OrderedDict, max_len: int):
-  if max(token_dict.values()) > max_len:
-    raise Exception(f"Largest sentence token is {max(token_dict.values())} word tokens long, greater than the permitted maximum of {max_len}.")
+  try:
+    if max(token_dict.values()) > max_len:
+      raise Exception(f"Largest sentence token is {max(token_dict.values())} word tokens long, greater than the permitted maximum of {max_len}.")
+  except Exception as e:
+    print(token_dict)
+    print(e)
   if len(token_dict) < 2:
     return [token_dict]
   total_len = sum(token_dict.values())
