@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import copy
 import math
 from nltk.tokenize import PunktSentenceTokenizer, RegexpTokenizer
 
@@ -16,15 +17,16 @@ def split_token_dict(token_dict: OrderedDict, max_len: int):
   min_n_chunks = math.ceil(total_len / max_len)
   target_chunk_len = int(round(total_len / min_n_chunks, 0))
   new_dict = OrderedDict()
+  token_dict_copy = copy.deepcopy(token_dict)
   counter = 0
   while counter < target_chunk_len:
-    if next(iter(token_dict.values())) + counter > max_len:
+    if next(iter(token_dict_copy.values())) + counter > max_len:
       break
-    sentence, token_len = token_dict.popitem(last=False)
+    sentence, token_len = token_dict_copy.popitem(last=False)
     counter += token_len
     new_dict[sentence] = token_len
-  if token_dict:
-    return [new_dict] + split_token_dict(token_dict, max_len)
+  if token_dict_copy:
+    return [new_dict] + split_token_dict(token_dict_copy, max_len)
   return [new_dict]
 
 def chunk_text_sentencewise(text, max_words):
