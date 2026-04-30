@@ -122,7 +122,7 @@ def wrangle_grants(grants_df):
         'Claimed Variance to Offer'
     ]
     for col in monetary_cols:
-        grants_df[col] = grants_df[col].str.replace(r'[\£,\,]', '', regex=True)
+        grants_df[col] = grants_df[col].str.replace('£', '').replace(',', '')
         grants_df = replace_values(grants_df, col, '-', None)
         grants_df = replace_values(grants_df, col, '', None)
         grants_df[col] = pd.to_numeric(grants_df[col])
