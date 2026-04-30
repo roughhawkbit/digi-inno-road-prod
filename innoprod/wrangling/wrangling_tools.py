@@ -1,9 +1,9 @@
 import pandas as pd
 
-def replace_values(df, colname, old_value, new_value):
-    mask = df[colname] == old_value
-    df.loc[mask, colname] = new_value
-    return df
+def replace_values(series: pd.Series, old_value, new_value):
+    mask = (series == old_value)
+    series.loc[mask] = new_value
+    return series
 
 def characterise_df_columnwise(df):
     characterisation = []
@@ -32,6 +32,13 @@ def is_non_empty(series: pd.Series):
 
 def remove_newlines_from_str_series(series: pd.Series.str):
     return series.replace('\n', '', regex=True)
+
+def parse_sterling_monetary_values(series: pd.Series.str):
+    series = series.str.replace('£', '')
+    series = series.str.replace(',', '')
+    series = replace_values(series, '-', None)
+    series = replace_values(series, '', None)
+    return pd.to_numeric(series)
 
 if __name__ == '__main__':
     series = pd.Series(['a', 'b', '', 'd', 'nan'])

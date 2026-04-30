@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .wrangling_tools import replace_values, remove_newlines_from_str_series
+from .wrangling_tools import parse_sterling_monetary_values, replace_values, remove_newlines_from_str_series
 
 def wrangle_roadmaps(roadmaps_df):
     # Convert Likert scales to integers
@@ -27,7 +27,7 @@ def wrangle_roadmaps(roadmaps_df):
         'Employees at Project Completion (FTE)'
     ]
     for col in int_cols + likert_cols:
-        roadmaps_df = replace_values(roadmaps_df, col, '', None)
+        roadmaps_df[col] = replace_values(roadmaps_df[col], '', None)
         roadmaps_df[col] = roadmaps_df[col].astype("Int64")
 
     # Monetary values
@@ -39,10 +39,7 @@ def wrangle_roadmaps(roadmaps_df):
         'Increased GVA'
     ]
     for col in monetary_cols:
-        roadmaps_df[col] = roadmaps_df[col].str.replace(r'[\£,\,]', '', regex=True)
-        roadmaps_df = replace_values(roadmaps_df, col, '-', None)
-        roadmaps_df = replace_values(roadmaps_df, col, '', None)
-        roadmaps_df[col] = pd.to_numeric(roadmaps_df[col])
+        roadmaps_df[col] = parse_sterling_monetary_values(roadmaps_df[col])
 
     # Date values
     date_cols = [
@@ -108,7 +105,7 @@ def wrangle_grants(grants_df):
         'Project Number'
     ]
     for col in int_cols:
-        grants_df = replace_values(grants_df, col, '', None)
+        grants_df[col] = replace_values(grants_df[col], '', None)
         grants_df[col] = grants_df[col].astype("Int64")
 
     # Monetary values
@@ -122,10 +119,7 @@ def wrangle_grants(grants_df):
         'Claimed Variance to Offer'
     ]
     for col in monetary_cols:
-        grants_df[col] = grants_df[col].str.replace('£', '').replace(',', '')
-        grants_df = replace_values(grants_df, col, '-', None)
-        grants_df = replace_values(grants_df, col, '', None)
-        grants_df[col] = pd.to_numeric(grants_df[col])
+        grants_df[col] = parse_sterling_monetary_values(grants_df[col])
 
     # Date values
     date_cols = [

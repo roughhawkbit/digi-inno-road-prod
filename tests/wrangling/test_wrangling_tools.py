@@ -3,13 +3,13 @@ import pandas as pd
 from innoprod.wrangling import wrangling_tools
 from tests.pdtestcase import PdTestCase
 
-class TestPathTools(PdTestCase):
+class TestWranglingTools(PdTestCase):
 
     def test_replace_values(self):
-        df = pd.DataFrame({'col1': ['a', 'b', 'c', 'd'], 'col2': [1, 2, 3, 4]})
-        df = wrangling_tools.replace_values(df, 'col1', 'b', 'x')
-        df = wrangling_tools.replace_values(df, 'col1', 'd', None)
-        self.assertEqual(df, pd.DataFrame({'col1': ['a', 'x', 'c', None], 'col2': [1, 2, 3, 4]}))
+        s = pd.Series(['a', 'b', 'c', 'd'])
+        s = wrangling_tools.replace_values(s, 'b', 'x')
+        s = wrangling_tools.replace_values(s, 'd', None)
+        self.assertEqual(s, pd.Series(['a', 'x', 'c', None]))
 
     def test_is_non_empty(self):
         ser = pd.Series(['text', '', 'more text', 'nan', 'even more text', None])
@@ -20,4 +20,10 @@ class TestPathTools(PdTestCase):
         ser = pd.Series(['text', 'more\n text', None, 'even\n\n more\k text\n', ''])
         expected = pd.Series(['text', 'more text', None, 'even more\k text', ''])
         result = wrangling_tools.remove_newlines_from_str_series(ser)
+        self.assertEqual(result, expected)
+
+    def test_parse_sterling_monetary_values(self):
+        ser = pd.Series(['£1,000', '£2,500.50', '-', '', None])
+        expected = pd.Series([1000.0, 2500.50, None, None, None])
+        result = wrangling_tools.parse_sterling_monetary_values(ser)
         self.assertEqual(result, expected)
