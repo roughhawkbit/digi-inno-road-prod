@@ -25,7 +25,7 @@ class BertMultipleChoiceWrapper:
             padding=True,
             truncation=True,
         )
-        outputs = self._model(**inputs)
+        outputs = self._model(**{k: v.unsqueeze(0) for k,v in inputs.items()})
 
         self._add_result(context, random_seed, outputs.logits.detach().numpy()[0])
 
