@@ -10,7 +10,7 @@ class BertMultipleChoiceWrapper:
         self._model = transformers.BertForMultipleChoice.from_pretrained(model_name)
         self._tokenizer = transformers.BertTokenizer.from_pretrained(model_name)
         self._choices = choices
-        self._results = pandas.DataFrame(columns=["context", "random_seed"] + choices)
+        self._results = []
 
     def predict(self, context, random_seed=None):
         # Random seed 
@@ -37,7 +37,7 @@ class BertMultipleChoiceWrapper:
         result['context'] = context
         result['random_seed'] = random_seed
 
-        self._results = self._results.append(
-            result,
-            ignore_index=True,
-        )
+        self._results = self._results.append(result)
+
+    def get_results(self):
+        return pandas.DataFrame(self._results)
