@@ -2,7 +2,7 @@ import pandas
 import os
 import transformers
 
-from ..random_tools import set_all_random_seeds
+from ..random_tools import get_os_random_seed, set_all_random_seeds
 
 
 def default_model_and_tokenizer(model_name):
@@ -21,7 +21,7 @@ class BertMultipleChoiceWrapper:
     def predict(self, context, random_seed=None):
         # Random seed 
         if random_seed is None:
-            random_seed = int.from_bytes(os.urandom(16), byteorder='big')
+            random_seed = get_os_random_seed()
         set_all_random_seeds(random_seed)
 
         inputs = self._tokenizer(
