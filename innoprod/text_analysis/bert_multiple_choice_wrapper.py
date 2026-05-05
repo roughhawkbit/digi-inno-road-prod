@@ -4,18 +4,24 @@ import transformers
 
 from ..random_tools import set_all_random_seeds
 
+
+def default_model_and_tokenizer(model_name):
+    model = transformers.BertForMultipleChoice.from_pretrained(model_name)
+    tokenizer = transformers.BertTokenizer.from_pretrained(model_name)
+    return model, tokenizer
+
+
 class BertMultipleChoiceWrapper:
-    def __init__(self, model_name, choices):
-        self._model_name = model_name
-        self._model = transformers.BertForMultipleChoice.from_pretrained(model_name)
-        self._tokenizer = transformers.BertTokenizer.from_pretrained(model_name)
+    def __init__(self, model, tokenizer, choices):
+        self._model = model
+        self._tokenizer = tokenizer
         self._choices = choices
         self._results = []
 
     def predict(self, context, random_seed=None):
         # Random seed 
         if random_seed is None:
-            random_seed = os.urandom(16)
+            random_seed = int.from_bytes(os.urandom(16), byteorder='big')
         set_all_random_seeds(random_seed)
 
         inputs = self._tokenizer(
@@ -27,7 +33,9 @@ class BertMultipleChoiceWrapper:
         )
         outputs = self._model(**{k: v.unsqueeze(0) for k,v in inputs.items()})
 
-        self._add_result(context, random_seed, outputs.logits.detach().numpy()[0])
+        detached_logits = outputs.logits.detach()
+        logits = detached_logits.numpy()[0]
+        self._add_result(context, random_seed, logits)
 
         predicted_index = outputs.logits.argmax().item()
         return self._choices[predicted_index]
@@ -39,4 +47,4 @@ class BertMultipleChoiceWrapper:
         self._results.append(result)
 
     def get_results(self):
-        return pandas.DataFrame(self._results)
+        return pandas.DataFrame(self._results)[['context', 'random_seed'] + self._choices]
