@@ -36,8 +36,7 @@ class BertMultipleChoiceWrapper:
         result = {choice: pred for choice, pred in zip(self._choices, predictions)}
         result['context'] = context
         result['random_seed'] = random_seed
-
-        self._results = self._results.append(result)
+        self._results.append(result)
 
     def get_results(self):
         return pandas.DataFrame(self._results)
