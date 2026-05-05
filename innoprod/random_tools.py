@@ -1,11 +1,18 @@
 from .env_tools import is_in_google_colab
 
 import numpy
+import os
 import random
 import transformers
 
 if is_in_google_colab():
     import torch # type: ignore
+
+
+def get_os_random_seed():
+    urand = os.urandom(4)
+    seed = int.from_bytes(urand)
+    return seed
 
 
 def set_all_random_seeds(seed):

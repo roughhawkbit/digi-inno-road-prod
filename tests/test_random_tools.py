@@ -7,6 +7,11 @@ from innoprod import random_tools
 
 class TestRandomTools(unittest.TestCase):
 
+    def test_get_os_random_seed(self):
+        seed = random_tools.get_os_random_seed()
+        random_tools.set_all_random_seeds(seed)
+
+
     def test_set_all_random_seeds(self):
         # Arrange
         random_tools.set_all_random_seeds(42)
