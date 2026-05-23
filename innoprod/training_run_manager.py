@@ -25,7 +25,7 @@ class TrainingRunManager:
 
 
     def get_next_run_dir(self):
-        highest_run_dir = find_highest_numbered_subdir(self.model_task_dir())
+        highest_run_dir = find_highest_numbered_subdir(self.model_task_dir(), "run-")
         if highest_run_dir is None:
             next_run_num = 1
         else:
@@ -36,13 +36,15 @@ class TrainingRunManager:
         return next_run_dir
     
 
+    # TODO: this method is fragile! It runs well if it is called before get_next_run_dir(),
+    # but always returns None if get_next_run_dir() has been called first.
     def get_highest_checkpoint_dir(self):
-        highest_run_dir = find_highest_numbered_subdir(self.model_task_dir())
+        highest_run_dir = find_highest_numbered_subdir(self.model_task_dir(), "run-")
         if highest_run_dir is None:
             return None
         else:
             run_dir = os.path.join(self.model_task_dir(), highest_run_dir)
-            highest_checkpoint_dir = find_highest_numbered_subdir(run_dir)
+            highest_checkpoint_dir = find_highest_numbered_subdir(run_dir, "checkpoint-")
             if highest_checkpoint_dir is None:
                 return None
             else:
