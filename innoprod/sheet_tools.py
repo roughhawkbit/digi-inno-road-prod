@@ -11,8 +11,14 @@ def get_sheet_details():
         sheet_details = json.load(f)
     return sheet_details
 
-def get_sheet_dfs():
-    sheet_details = get_sheet_details()
+def get_sheet_dfs(sheet_id=None, ranges=None):
+    if sheet_id is None:
+        sheet_details = get_sheet_details()
+    else:
+        sheet_details = {
+            'sheet_id': sheet_id,
+            'ranges': ranges
+        }
     data = {}
     for name, rng in sheet_details['ranges'].items():
         lol = read_spreadsheet(sheet_details['sheet_id'], rng)
