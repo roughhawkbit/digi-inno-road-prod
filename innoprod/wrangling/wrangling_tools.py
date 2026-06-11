@@ -21,7 +21,7 @@ def characterise_df_columnwise(df):
             'Completeness (%)': c / N
         }
         characterisation.append(var_char)
-    characterisation = pd.DataFrame(characterisation, columns=['Name', 'Uniqueness', 'Completeness'])
+    characterisation = pd.DataFrame(characterisation, columns=['Name', 'Uniqueness (n)', 'Uniqueness (%)', 'Completeness (n)', 'Completeness (%)'])
     return characterisation
 
 def is_non_empty(series: pd.Series):
