@@ -18,7 +18,6 @@ def wrangle_roadmaps(roadmaps_df):
     # Integer values
     int_cols = [
         'Number of GAFs', 
-        'Number of FTE Employees (calc)',
         'Number of FT employees',
         'Number of PT employees',
         'Current Digital Readiness Score (refer to PAS:1040)',
@@ -29,6 +28,14 @@ def wrangle_roadmaps(roadmaps_df):
     for col in int_cols + likert_cols:
         roadmaps_df[col] = replace_values(roadmaps_df[col], '', None)
         roadmaps_df[col] = roadmaps_df[col].astype("Int64")
+
+    # Real number values
+    real_cols = [
+        'Number of FTE Employees (calc)',
+    ]
+    for col in real_cols:
+        roadmaps_df[col] = replace_values(roadmaps_df[col], '', None)
+        roadmaps_df[col] = roadmaps_df[col].astype("Float64")
 
     # Monetary values
     monetary_cols = [
