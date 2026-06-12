@@ -2,7 +2,59 @@ import pandas as pd
 
 from .wrangling_tools import parse_sterling_monetary_values, replace_values, remove_newlines_from_str_series
 
+roadmaps_expected_columns = [
+    'Client ID', 'Status', 'Number of GAFs', 'Referral Source', 'Primary_contact_id',
+    'LEP', 'Local Authority', 'Nature of Business/core activity',
+    'Turnover', 'Enquiry Date', 'Org Size by Number of FTE (calc)',
+    'Number of FTE Employees (calc)', 'Number of FT employees',
+    'Number of PT employees', 'Registration Form Complete',
+    'Edge Digital Diagnostic Complete', 'GROWTHmapper Diagnostic Date',
+    'Roadmap Complete',
+    'Summary review of Edge Digital diagnostic report & current state and key improvement areas',
+    'Current Digital Readiness Score (refer to PAS:1040)',
+    'What are the internal barriers to growth? How do you intend to finance future growth? Are there sufficient leadership and management skills in the business to achieve your growth? What opportunities do you have to expand into new markets?',
+    'Main historical barrier', 'Details of any existing Digital Strategy',
+    'Do you have a Digital Champion in place?',
+    'Level of current Strategic Digital Skills/knowledge in the business',
+    'Level of current Technical Digital Skills/knowledge in the business',
+    'Whether the business is already investing/adopting/utilising Industry 4.0 Technologies, with examples',
+    'Summary of the identified problems, including Gap Analysis',
+    'Key potential industry 4.0 solutions to address the identified problems/gaps',
+    'Recommended Action Plan to utilise Industry 4.0 Technology',
+    'Overview of qualitative benefits of recommended Action Plan (positive/negative)',
+    'Skills and other requirements that will be needed to successfully implement the recommended Action Plan',
+    'Application area of technology in the Action Plan',
+    'Sub-application area of technology in the Action Plan',
+    'Anticipated resulting Digital Readiness Score (refer to PAS:1040)',
+    'Anticipated Made Smarter Support Package(s) to be accessed',
+    'Other business support referrals', 'Requirements/Plans: Short Term',
+    'Requirements/Plans: Medium Term', 'Requirements/Plans: Long Term',
+    'Employee Increase (FTE calc)', 'SDR Complete Date',
+    'How did you find the process of accessing the programme?',
+    'How valuable did you find the involvement of your contact within the programme during the course of the support?',
+    'How valuable did you find the GROWTHmapper and its report in identifying the key areas of supporting your business?',
+    'How valuable did you find the support you received from the Expert Coach during the course of the programme?',
+    'To what extent were you satisfied with the Programme overall?',
+    'Would you recommend the Programme to others?',
+    'What has been your overall opinion of the support you have received in this programme? (Add comments)',
+    'Willing to be approached for case study?',
+    'Industry 4.0 Technology Adopted',
+    'Has the intervention supported higher skilled, higher paid jobs? If so, why?',
+    'Employees at Project Completion (FTE)',
+    'At risk jobs still in existence post support - FTE (Jobs Safeguarded)',
+    'Tonnes CO2 Reduction',
+    'Innovation/R&D Spend (post) for past year (including new product design)',
+    'Tonnes Waste Reduction to Landfill',
+    'Has resource consumption (electricity, gas, waste, and water) or Greenhouse Gas emissions reduced since you started working with the Programme?',
+    'Increased Turnover £', 'Increased Pre-Tax Profits',
+    'Increased TO/Employee', 'Increased GVA'
+]
+
 def wrangle_roadmaps(roadmaps_df):
+    # Check expected columns are present
+    missing_cols = set(roadmaps_expected_columns) - set(roadmaps_df.columns)
+    for col in missing_cols:
+        roadmaps_df[col] = pd.NA
     # Convert Likert scales to integers
     likert_cols = [
         'How did you find the process of accessing the programme?',
@@ -70,6 +122,7 @@ def wrangle_roadmaps(roadmaps_df):
 
     # Categorical values
     categorical_cols = {
+        'Status': None,
         'Referral Source': None,
         'LEP': None,
         'Local Authority': None,
