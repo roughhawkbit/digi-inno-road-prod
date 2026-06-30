@@ -1,5 +1,6 @@
 import os
 
+from .env_tools import is_in_google_colab
 
 def find_highest_numbered_subdir(directory, prefix):
   subdirs = os.listdir(directory)
@@ -16,6 +17,8 @@ def find_highest_numbered_subdir(directory, prefix):
 
 
 def secrets_path():
+  if is_in_google_colab():
+    return '/content/drive/MyDrive/digi-inno-road-prod/secrets'
   p = os.path.abspath(__file__)
   p = os.path.join(p, "../../secrets")
   p = os.path.abspath(p)
