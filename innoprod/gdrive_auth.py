@@ -11,7 +11,7 @@ from googleapiclient.errors import HttpError
 
 from .path_tools import secrets_path
 
-SCOPES = ["https://www.googleapis.com/auth/documents", "https://www.googleapis.com/auth/drive"]
+SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
 def get_credentials():
   creds = None
